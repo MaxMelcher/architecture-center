@@ -4,9 +4,12 @@ description: The Azure Architecture Center is the official center for guidance, 
 layout: LandingPage
 ms.topic: landing-page
 ms.date: 09/28/2018
+google-site-verification: b-xRLveOzJ9oSOh37wgRTRB2lMOoFY8HiHf9_0DIawE
 ---
 
 # Azure Architecture Center
+
+<!-- markdownlint-disable MD033 -->
 
 <!-- main panel -->
 <ul class="panelContent cardsC">
@@ -29,7 +32,7 @@ ms.date: 09/28/2018
     </li>
     <!-- Reference architectures -->
     <li>
-        <a href="/azure/architecture/reference-architectures">
+        <a href="/azure/architecture/architectures/?filter=reference-architecture">
             <div class="cardSize">
                 <div class="cardPadding">
                     <div class="card">
@@ -50,10 +53,10 @@ ms.date: 09/28/2018
             <div class="cardSize">
                 <div class="cardPadding">
                     <div class="card">
-                        <img src="_images/cloud-adoption.svg" alt="" />
+                        <img src="_images/cloud-adoption-framework.png" alt="" />
                         <div class="cardText">
-                            <h3>Enterprise Cloud Adoption</h3>
-                            <p>This guide outlines a process for creating an organization-wide cloud adoption strategy. It focuses on organizational readiness, governance, and infrastructure.</p>
+                            <h3>Microsoft Cloud Adoption Framework for Azure</h3>
+                            <p>A process for creating an organization-wide cloud adoption strategy, focusing on policies, governance, and infrastructure.</p>
                         </div>
                     </div>
                 </div>
@@ -64,6 +67,26 @@ ms.date: 09/28/2018
 
 <!-- Second panel -->
 <ul class="panelContent cardsI">
+    <!-- Example Workloads -->
+    <li>
+        <a href="/azure/architecture/architectures/?filter=example-workload">
+            <div class="cardSize">
+                <div class="cardPadding">
+                    <div class="card">
+                        <div class="cardImageOuter">
+                            <div class="cardImage">
+                                <img src="https://docs.microsoft.com/media/common/i_library.svg" alt="" />
+                            </div>
+                        </div>
+                        <div class="cardText">
+                            <h3>Example Workloads</h3>
+                            <p>Workloads examples covering the implementation of specific business or technical challenges using Azure</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </li>
     <!-- Microservices -->
     <li>
         <a href="/azure/architecture/microservices">
@@ -104,6 +127,26 @@ ms.date: 09/28/2018
             </div>
         </a>
     </li>
+    <!-- HPC Topic Page -->
+    <li>
+        <a href="./topics/high-performance-computing/index.md">
+            <div class="cardSize">
+                <div class="cardPadding">
+                    <div class="card">
+                        <div class="cardImageOuter">
+                            <div class="cardImage">
+                                <img src="_images/hpc-blue-multi.svg" alt="" />
+                            </div>
+                        </div>
+                        <div class="cardText">
+                            <h3>High Performance Computing (HPC) on Azure</h3>
+                            <p>Design guidance and component information for building High Performance Computing (HPC) applications on Azure.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </li>
     <!-- Best practices -->
     <li>
         <a href="/azure/architecture/best-practices/">
@@ -117,7 +160,7 @@ ms.date: 09/28/2018
                         </div>
                         <div class="cardText">
                             <h3>Cloud Best Practices</h3>
-                            <p>Best practices for cloud applications, covering aspects such as auto-scaling, caching, data partitioning,
+                            <p>Best practices for cloud applications, covering aspects such as autoscaling, caching, data partitioning,
                                 API design, and others.</p>
                         </div>
                     </div>
@@ -127,7 +170,7 @@ ms.date: 09/28/2018
     </li>
     <!-- Resiliency -->
     <li>
-        <a href="/azure/architecture/resiliency">
+        <a href="/azure/architecture/framework/resiliency/overview">
             <div class="cardSize">
                 <div class="cardPadding">
                     <div class="card">
@@ -137,8 +180,8 @@ ms.date: 09/28/2018
                             </div>
                         </div>
                         <div class="cardText">
-                            <h3>Design for Resiliency</h3>
-                            <p>Learn how to design resilient applications for Azure.</p>
+                            <h3>Designing reliable Azure applications</h3>
+                            <p>Learn how to build fault tolerance and high availability into your applications for Azure.</p>
                         </div>
                     </div>
                 </div>
@@ -147,7 +190,7 @@ ms.date: 09/28/2018
     </li>
     <!-- Building blocks -->
     <li>
-        <a href="https://github.com/mspnp/template-building-blocks/wiki">
+        <a href="https://github.com/mspnp/template-building-blocks/blob/master/README.md">
             <div class="cardSize">
                 <div class="cardPadding">
                     <div class="card">
@@ -185,46 +228,6 @@ ms.date: 09/28/2018
             </div>
         </a>
     </li>
-    <!-- Checklists -->
-    <li>
-        <a href="/azure/architecture/checklist/">
-            <div class="cardSize">
-                <div class="cardPadding">
-                    <div class="card">
-                        <div class="cardImageOuter">
-                            <div class="cardImage">
-                                <img src="_images/checklist.svg" alt="" />
-                            </div>
-                        </div>
-                        <div class="cardText">
-                            <h3>Design Review Checklists</h3>
-                            <p>Checklists to assist developers and solution architects during the design process.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </li>
-    <!-- Azure Virtual Datacenter -->
-    <li>
-        <a href="./vdc/index.md">
-            <div class="cardSize">
-                <div class="cardPadding">
-                    <div class="card">
-                        <div class="cardImageOuter">
-                            <div class="cardImage">
-                                <img src="_images/virtual-datacenter.svg" alt="" />
-                            </div>
-                        </div>
-                        <div class="cardText">
-                            <h3>Azure Virtual Datacenter</h3>
-                            <p>When deploying enterprise workloads to the cloud, organizations must balance governance with developer agility. Azure Virtual Datacenter provides models to achieve this balance with an emphasis on governance.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </li>
         <!-- Azure for AWS Professionals -->
     <li>
         <a href="/azure/architecture/aws-professional">
@@ -247,7 +250,7 @@ ms.date: 09/28/2018
     </li>
     <!-- Performance anti-practices -->
     <li>
-        <a href="/azure/architecture/antipatterns">
+        <a href="/azure/architecture/performance">
             <div class="cardSize">
                 <div class="cardPadding">
                     <div class="card">
@@ -257,8 +260,28 @@ ms.date: 09/28/2018
                             </div>
                         </div>
                         <div class="cardText">
-                            <h3>Performance Antipatterns</h3>
-                            <p>How to detect and fix some common causes of performance and scalability problems in cloud applications.</p>
+                            <h3>Performance tuning</h3>
+                            <p>Used load tests and metrics to diagnose performance issues in cloud applications.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </li>
+    <!-- Azure Virtual Datacenter -->
+    <li>
+        <a href="./vdc/index.md">
+            <div class="cardSize">
+                <div class="cardPadding">
+                    <div class="card">
+                        <div class="cardImageOuter">
+                            <div class="cardImage">
+                                <img src="_images/virtual-datacenter.svg" alt="" />
+                            </div>
+                        </div>
+                        <div class="cardText">
+                            <h3>Azure Virtual Datacenter</h3>
+                            <p>When deploying enterprise workloads to the cloud, organizations must balance governance with developer agility. Azure Virtual Datacenter provides models to achieve this balance with an emphasis on governance.</p>
                         </div>
                     </div>
                 </div>
@@ -358,4 +381,22 @@ ms.date: 09/28/2018
         </div>
         </a>
     </li>
-</ul>   
+    <li>
+        <a href="/learn/modules/n-tier-architecture/">
+        <div class="cardSize">
+            <div class="cardPadding">
+                <div class="card">
+                    <div class="cardImageOuter">
+                        <div class="cardImage">
+                            <img src="/learn/achievements/n-tier-architecture.svg" alt="" />
+                        </div>
+                    </div>
+                    <div class="cardText">
+                        <h3>Tour the N-tier architecture style</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </a>
+    </li>
+</ul>

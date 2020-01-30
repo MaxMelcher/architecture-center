@@ -1,42 +1,47 @@
 ---
 title: Serverless web application 
-description: Reference architecture that shows a serverless web application and web API
+titleSuffix: Azure Reference Architectures
+description: Recommended architecture for a serverless web application and web API.
 author: MikeWasson
-ms.date: 10/16/2018
+ms.date: 05/28/2019
+ms.topic: reference-architecture
+ms.service: architecture-center
+ms.subservice: reference-architecture
+ms.custom: seodec18, serverless
 ---
 
-# Serverless web application 
+# Serverless web application on Azure
 
-This reference architecture shows a serverless web application. The application serves static content from Azure Blob Storage, and implements an API using Azure Functions. The API reads data from Cosmos DB and returns the results to the web app. A reference implementation for this architecture is available on [GitHub][github].
+This reference architecture shows a [serverless](https://azure.microsoft.com/solutions/serverless/) web application. The application serves static content from Azure Blob Storage, and implements an API using Azure Functions. The API reads data from Cosmos DB and returns the results to the web app.
 
-![](./_images/serverless-web-app.png)
- 
+![GitHub logo](../../_images/github.png) A reference implementation for this architecture is available on [GitHub][github].
+
+![Reference architecture for a serverless web application](./_images/serverless-web-app.png)
+
 The term serverless has two distinct but related meanings:
 
-- **Backend as a service** (BaaS). Backend cloud services, such as databases and storage, provide APIs that enable client applications to connect directly to these services. 
-- **Functions as a service** (FaaS). In this model, a "function" is a piece of code that is deployed to the cloud and runs inside a hosting environment that completely abstracts the servers that run the code. 
+- **Backend as a service** (BaaS). Back-end cloud services, such as databases and storage, provide APIs that enable client applications to connect directly to these services.
+- **Functions as a service** (FaaS). In this model, a "function" is a piece of code that is deployed to the cloud and runs inside a hosting environment that completely abstracts the servers that run the code.
 
-Both definitions have in common the idea that developers and DevOps personnel don't need to deploy, configure, or manage servers. This reference architecture focuses on FaaS using Azure Functions, although serving web content from Azure Blob Storage is an example of BaaS. Some important characteristics of FaaS are:
+Both definitions have in common the idea that developers and DevOps personnel don't need to deploy, configure, or manage servers. This reference architecture focuses on FaaS using Azure Functions, although serving web content from Azure Blob Storage could be an example of BaaS. Some important characteristics of FaaS are:
 
 1. Compute resources are allocated dynamically as needed by the platform.
 1. Consumption-based pricing: You are charged only for the compute resources used to execute your code.
 1. The compute resources scale on demand based on traffic, without the developer needing to do any configuration.
 
-Functions are executed when an external trigger occurs, such as an HTTP request or a message arriving on a queue. This makes an [event-driven architecture style][event-driven] natural for serverless architectures. To coordinate work between components in the architecture, consider using message brokers or pub/sub patterns. For help choosing between messaging technologies in Azure, see [Choose between Azure services that deliver messages][azure-messaging].
+Functions are executed when an external trigger occurs, such as an HTTP request or a message arriving on a queue. This makes an [event-driven architecture style][event-driven] natural for serverless architectures. To coordinate work between components in the architecture, consider using message brokers or pub/sub patterns. For help with choosing between messaging technologies in Azure, see [Choose between Azure services that deliver messages][azure-messaging].
 
 ## Architecture
-The architecture consists of the following components.
 
-**Blob Storage**. Static web content, such as HTML, CSS, and JavaScript files, are stored in Azure Blob Storage and served to clients by using [static website hosting][static-hosting]. All dynamic interaction happens through JavaScript code making calls to the backend APIs. There is no server-side code to render the web page. Static website hosting supports index documents and custom 404 error pages.
+The architecture consists of the following components:
 
-> [!NOTE]
-> Static website hosting is currently in [preview][static-hosting-preview].
+**Blob Storage**. Static web content, such as HTML, CSS, and JavaScript files, are stored in Azure Blob Storage and served to clients by using [static website hosting][static-hosting]. All dynamic interaction happens through JavaScript code making calls to the back-end APIs. There is no server-side code to render the web page. Static website hosting supports index documents and custom 404 error pages.
 
 **CDN**. Use [Azure Content Delivery Network][cdn] (CDN) to cache content for lower latency and faster delivery of content, as well as providing an HTTPS endpoint.
 
 **Function Apps**. [Azure Functions][functions] is a serverless compute option. It uses an event-driven model, where a piece of code (a "function") is invoked by a trigger. In this architecture, the function is invoked when a client makes an HTTP request. The request is always routed through an API gateway, described below.
 
-**API Management**. [API Management][apim] provides a API gateway that sits in front of the HTTP function. You can use API Management to publish and manage APIs used by client applications. Using a gateway helps to decouple the front-end application from the back-end APIs. For example, API Management can rewrite URLs, transform requests before they reach the backend, set request or response headers, and so forth.
+**API Management**. [API Management][apim] provides an API gateway that sits in front of the HTTP function. You can use API Management to publish and manage APIs used by client applications. Using a gateway helps to decouple the front-end application from the back-end APIs. For example, API Management can rewrite URLs, transform requests before they reach the back end, set request or response headers, and so forth.
 
 API Management can also be used to implement cross-cutting concerns such as:
 
@@ -44,11 +49,11 @@ API Management can also be used to implement cross-cutting concerns such as:
 - Validating OAuth tokens for authentication
 - Enabling cross-origin requests (CORS)
 - Caching responses
-- Monitoring and logging requests  
+- Monitoring and logging requests
 
 If you don't need all of the functionality provided by API Management, another option is to use [Functions Proxies][functions-proxy]. This feature of Azure Functions lets you define a single API surface for multiple function apps, by creating routes to back-end functions. Function proxies can also perform limited transformations on the HTTP request and response. However, they don't provide the same rich policy-based capabilities of API Management.
 
-**Cosmos DB**. [Cosmos DB][cosmosdb] is a multi-model database  service. For this scenario, the function application fetches documents from Cosmos DB in response to HTTP GET requests from the client.
+**Cosmos DB**. [Cosmos DB][cosmosdb] is a multi-model database service. For this scenario, the function application fetches documents from Cosmos DB in response to HTTP GET requests from the client.
 
 **Azure Active Directory** (Azure AD). Users sign into the web application by using their Azure AD credentials. Azure AD returns an access token for the API, which the web application uses to authenticate API requests (see [Authentication](#authentication)).
 
@@ -60,7 +65,7 @@ If you don't need all of the functionality provided by API Management, another o
 
 ### Function App plans
 
-Azure Functions supports two hosting models. With the **consumption plan**, compute power is automatically allocated when your code is running.  With the **App Service** plan, a set of VMs are allocated for your code. The App Service plan defines the number of VMs and the VM size. 
+Azure Functions supports two hosting models. With the **consumption plan**, compute power is automatically allocated when your code is running.  With the **App Service** plan, a set of VMs are allocated for your code. The App Service plan defines the number of VMs and the VM size.
 
 Note that the App Service plan is not strictly *serverless*, according to the definition given above. The programming model is the same, however &mdash; the same function code can run in both a consumption plan and an App Service plan.
 
@@ -74,9 +79,9 @@ Here are some factors to consider when choosing which type of plan to use:
 
 ### Function App boundaries
 
-A *function app* hosts the execution of one or more *functions*. You can use a function app to group several functions together as a logical unit. Within a function app, the functions share the same application settings, hosting plan, and deployment lifecycle. Each function app has its own hostname.  
+A *function app* hosts the execution of one or more *functions*. You can use a function app to group several functions together as a logical unit. Within a function app, the functions share the same application settings, hosting plan, and deployment lifecycle. Each function app has its own hostname.
 
-Use function apps to group functions that share the same lifecycle and settings. Functions that don't share the same lifecycle should be hosted in different function apps. 
+Use function apps to group functions that share the same lifecycle and settings. Functions that don't share the same lifecycle should be hosted in different function apps.
 
 Consider taking a microservices approach, where each function app represents one microservice, possibly consisting of several related functions. In a microservices architecture, services should have loose coupling and high functional cohesion. *Loosely* coupled means you can change one service without requiring other services to be updated at the same time. *Cohesive* means a service has a single, well-defined purpose. For more discussion of these ideas, see [Designing microservices: Domain analysis][microservices-domain-analysis].
 
@@ -89,13 +94,13 @@ For example, the `GetStatus` function in the reference implementation uses the C
 ```csharp
 [FunctionName("GetStatusFunction")]
 public static Task<IActionResult> Run(
-    [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, 
+    [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
     [CosmosDB(
         databaseName: "%COSMOSDB_DATABASE_NAME%",
         collectionName: "%COSMOSDB_DATABASE_COL%",
         ConnectionStringSetting = "COSMOSDB_CONNECTION_STRING",
         Id = "{Query.deviceId}",
-        PartitionKey = "{Query.deviceId}")] dynamic deviceStatus, 
+        PartitionKey = "{Query.deviceId}")] dynamic deviceStatus,
     ILogger log)
 {
     ...
@@ -106,11 +111,11 @@ By using bindings, you don't need to write code that talks directly to the servi
 
 ## Scalability considerations
 
-**Functions**. For the consumption plan, the HTTP trigger scales based on the traffic. There is a limit to the number of concurrent function instances, but each instance can process more than one request at a time. For an App Service plan, the HTTP trigger scales according to the number of VM instances, which can be a fixed value or can autoscale based on a set of autoscaling rules. For information, see [Azure Functions scale and hosting][functions-scale]. 
+**Functions**. For the consumption plan, the HTTP trigger scales based on the traffic. There is a limit to the number of concurrent function instances, but each instance can process more than one request at a time. For an App Service plan, the HTTP trigger scales according to the number of VM instances, which can be a fixed value or can autoscale based on a set of autoscaling rules. For information, see [Azure Functions scale and hosting][functions-scale].
 
 **Cosmos DB**. Throughput capacity for Cosmos DB is measured in [Request Units][ru] (RU). A 1-RU throughput corresponds to the throughput need to GET a 1KB document. In order to scale a Cosmos DB container past 10,000 RU, you must specify a [partition key][partition-key] when you create the container and include the partition key in every document that you create. For more information about partition keys, see [Partition and scale in Azure Cosmos DB][cosmosdb-scale].
 
-**API Management**. API Management can scale out and supports rule-based autoscaling. Note that the scaling process takes at least 20 minutes. If your traffic is bursty, you should provision for the maximum burst traffic that you expect. However, autoscaling is useful for handling hourly or daily variations in traffic. For more information, see [Automatically scale an Azure API Management instance][apim-scale].
+**API Management**. API Management can scale out and supports rule-based autoscaling. The scaling process takes at least 20 minutes. If your traffic is bursty, you should provision for the maximum burst traffic that you expect. However, autoscaling is useful for handling hourly or daily variations in traffic. For more information, see [Automatically scale an Azure API Management instance][apim-scale].
 
 ## Disaster recovery considerations
 
@@ -126,16 +131,16 @@ The deployment shown here resides in a single Azure region. For a more resilient
 
 ### Authentication
 
-The `GetStatus` API in the reference implementation uses Azure AD to authenticate requests. Azure AD supports the Open ID Connect protocol, which is an authentication protocol built on top of the OAuth 2 protocol.
+The `GetStatus` API in the reference implementation uses Azure AD to authenticate requests. Azure AD supports the OpenID Connect protocol, which is an authentication protocol built on top of the OAuth 2 protocol.
 
 In this architecture, the client application is a single-page application (SPA) that runs in the browser. This type of client application cannot keep a client secret or an authorization code hidden, so the implicit grant flow is appropriate. (See [Which OAuth 2.0 flow should I use?][oauth-flow]). Here's the overall flow:
 
 1. The user clicks the "Sign in" link in the web application.
-1. The browser is redirected the Azure AD sign in page. 
+1. The browser is redirected the Azure AD sign in page.
 1. The user signs in.
 1. Azure AD redirects back to the client application, including an access token in the URL fragment.
-1. When the web application calls the API, it includes the access token in the Authentication header. The application ID is sent as the audience ('aud') claim in the access token. 
-1. The backend API validates the access token.
+1. When the web application calls the API, it includes the access token in the Authentication header. The application ID is sent as the audience ('aud') claim in the access token.
+1. The back-end API validates the access token.
 
 To configure authentication:
 
@@ -143,63 +148,21 @@ To configure authentication:
 
 - Enable Azure AD authentication inside the Function App. For more information, see [Authentication and authorization in Azure App Service][app-service-auth].
 
-- Add a policy to API Management to pre-authorize the request by validating the access token:
-
-    ```xml
-    <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized. Access token is missing or invalid.">
-        <openid-config url="https://login.microsoftonline.com/[Azure AD tenant ID]/.well-known/openid-configuration" />
-        <required-claims>
-            <claim name="aud">
-                <value>[Application ID]</value>
-            </claim>
-        </required-claims>
-    </validate-jwt>
-    ```
+- Add the [validate-jwt policy][apim-validate-jwt] to API Management to pre-authorize the request by validating the access token.
 
 For more details, see the [GitHub readme][readme].
 
+It's recommended to create separate app registrations in Azure AD for the client application and the back-end API. Grant the client application permission to call the API. This approach gives you the flexibility to define multiple APIs and clients and control the permissions for each.
+
+Within an API, use [scopes][scopes] to give applications fine-grained control over what permissions they request from a user. For example, an API might have `Read` and `Write` scopes, and a particular client app might ask the user to authorize `Read` permissions only.
+
 ### Authorization
 
-In many applications, the backend API must check whether a user has permission to perform a given action. It's recommended to use [claims-based authorization][claims], where information about the user is conveyed by the identity provider (in this case, Azure AD) and used to make authorization decisions. 
+In many applications, the back-end API must check whether a user has permission to perform a given action. It's recommended to use [claims-based authorization][claims], where information about the user is conveyed by the identity provider (in this case, Azure AD) and used to make authorization decisions. For example, when you register an application in Azure AD, you can define a set of application roles. When a user signs into the application, Azure AD includes a `roles` claim for each role that the user has been granted, including roles that are inherited through group membership.
 
-Some claims are provided inside the ID token that Azure AD returns to the client. You can get these claims from within the function app by examining the X-MS-CLIENT-PRINCIPAL header in the request. For other claims, use [Microsoft Graph][graph] to query Azure AD (requires user consent during sign-in). 
+The ID token that Azure AD returns to the client contains some of the user's claims. Within the function app, these claims are available in the X-MS-CLIENT-PRINCIPAL header of the request. However, it's simpler to read this information from binding data. For other claims, use [Microsoft Graph][graph] to query Azure AD. (The user must consent to this action when signing in.)
 
-For example, when you register an application in Azure AD, you can define a set of application roles in the application's registration manifest. When a user signs into the application, Azure AD includes a "roles" claim for each role that the user has been granted (including roles that are inherited through group membership). 
-
-In the reference implementation, the function checks whether the authenticated user is a member of the `GetStatus` application role. If not, the function returns an HTTP Unauthorized (401) response. 
-
-```csharp
-[FunctionName("GetStatusFunction")]
-public static Task<IActionResult> Run(
-    [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, 
-    [CosmosDB(
-        databaseName: "%COSMOSDB_DATABASE_NAME%",
-        collectionName: "%COSMOSDB_DATABASE_COL%",
-        ConnectionStringSetting = "COSMOSDB_CONNECTION_STRING",
-        Id = "{Query.deviceId}",
-        PartitionKey = "{Query.deviceId}")] dynamic deviceStatus, 
-    ILogger log)
-{
-    log.LogInformation("Processing GetStatus request.");
-
-    return req.HandleIfAuthorizedForRoles(new[] { GetDeviceStatusRoleName },
-        async () =>
-        {
-            string deviceId = req.Query["deviceId"];
-            if (deviceId == null)
-            {
-                return new BadRequestObjectResult("Missing DeviceId");
-            }
-
-            return await Task.FromResult<IActionResult>(deviceStatus != null
-                    ? (ActionResult)new OkObjectResult(deviceStatus)
-                    : new NotFoundResult());
-        },
-        log);
-}
-```
-
-In this code example, `HandleIfAuthorizedForRoles` is an extension method that checks for the role claim and returns HTTP 401 if the claim isn't found. You can find the source code [here][HttpRequestAuthorizationExtensions]. Notice that `HandleIfAuthorizedForRoles` takes an `ILogger` parameter. You should log unauthorized requests so that you have an audit trail and can diagnose issues if needed. At the same time, avoid leaking any detailed information inside the HTTP 401 response.
+For more information, see [Working with client identities](/azure/azure-functions/functions-bindings-http-webhook#working-with-client-identities).
 
 ### CORS
 
@@ -221,16 +184,16 @@ In this reference architecture, the web application and the API do not share the
 
 In this example, the **allow-credentials** attribute is **true**. This authorizes the browser to send credentials (including cookies) with the request. Otherwise, by default the browser does not send credentials with a cross-origin request.
 
-> [!NOTE] 
+> [!NOTE]
 > Be very careful about setting **allow-credentials** to **true**, because it means a website can send the user's credentials to your API on the user's behalf, without the user being aware. You must trust the allowed origin.
 
 ### Enforce HTTPS
 
 For maximum security, require HTTPS throughout the request pipeline:
 
-- **CDN**. Azure CDN supports HTTPS on the `*.azureedge.net` subdomain by default. To enable HTTPS in the CDN for custom domain names, see [Tutorial: Configure HTTPS on an Azure CDN custom domain][cdn-https]. 
+- **CDN**. Azure CDN supports HTTPS on the `*.azureedge.net` subdomain by default. To enable HTTPS in the CDN for custom domain names, see [Tutorial: Configure HTTPS on an Azure CDN custom domain][cdn-https].
 
-- **Static website hosting**. Enable the "[Secure transfer required][storage-https]" option on the Storage account. When this option is enabled, the storage account only allows requests from secure HTTPS connections. 
+- **Static website hosting**. Enable the "[Secure transfer required][storage-https]" option on the Storage account. When this option is enabled, the storage account only allows requests from secure HTTPS connections.
 
 - **API Management**. Configure the APIs to use HTTPS protocol only. You can configure this in the Azure portal or through a Resource Manager template:
 
@@ -252,15 +215,15 @@ For maximum security, require HTTPS throughout the request pipeline:
     }
     ```
 
-- **Azure Functions**. Enable the "[HTTPS Only][functions-https]" setting. 
+- **Azure Functions**. Enable the "[HTTPS Only][functions-https]" setting.
 
 ### Lock down the function app
 
 All calls to the function should go through the API gateway. You can achieve this as follows:
 
-- Configure the function app to require a function key. The API Management gateway will include the function key when it calls the function app. This prevents clients from calling the function directly, bypassing the gateway. 
+- Configure the function app to require a function key. The API Management gateway will include the function key when it calls the function app. This prevents clients from calling the function directly, bypassing the gateway.
 
-- The API Management gateway has a [static IP address][apim-ip]. Restrict the Azure Function to allow only calls from that static IP address. For more information, see [Azure App Service Static IP Restrictions][app-service-ip-restrictions]. (This feature is available for Standard tier services only.) 
+- The API Management gateway has a [static IP address][apim-ip]. Restrict the Azure Function to allow only calls from that static IP address. For more information, see [Azure App Service Static IP Restrictions][app-service-ip-restrictions]. (This feature is available for Standard tier services only.)
 
 ### Protect application secrets
 
@@ -270,23 +233,55 @@ Alternatively, you can store application secrets in Key Vault. This allows you t
 
 ## DevOps considerations
 
+### Front-end deployment
+
+The front end of this reference architecture is a single page application, with JavaScript accessing the serverless back-end APIs, and static content providing a fast user experience. The following are some important considerations for such an application:
+
+- Deploy the application uniformly to users over a wide geographical area with a global-ready CDN, with the static content hosted on the cloud. This avoids the need for a dedicated web server. Read [Integrate an Azure storage account with Azure CDN](https://docs.microsoft.com/azure/cdn/cdn-create-a-storage-account-with-cdn) to get started. Secure your application with [HTTPS](https://docs.microsoft.com/azure/storage/blobs/storage-https-custom-domain-cdn). Read the [Best practices for using content delivery networks](https://docs.microsoft.com/azure/architecture/best-practices/cdn) for additional recommendations.
+- Use a fast and reliable CI/CD service such as [Azure Pipelines](https://docs.microsoft.com/azure/devops/pipelines/get-started/what-is-azure-pipelines?view=azure-devops), to automatically build and deploy every source change. The source must reside in an online version control system. For more details, read [Create your first pipeline](https://docs.microsoft.com/azure/devops/pipelines/create-first-pipeline?view=azure-devops&tabs=tfs-2018-2).
+- Compress your website files to reduce the bandwidth consumption on the CDN and improve performance. Azure CDN allows [compression on the fly on the edge servers](https://docs.microsoft.com/azure/cdn/cdn-improve-performance). Alternatively, the deploy pipeline in this reference architecture compresses the files before deploying them to the Blob storage. This reduces the storage requirement, and gives you more freedom to choose the compression tools, regardless of any CDN limitations.
+- The CDN should be able to [purge its cache](https://docs.microsoft.com/azure/cdn/cdn-purge-endpoint) to ensure all users are served the freshest content. A cache purge is required if the build and deploy processes are not atomic, for example, if they replace old files with newly built ones in the same origin folder.
+- A different cache strategy such as versioning using directories, may not require a purge by the CDN. The build pipeline in this front-end application creates a new directory for each newly built version. This version is uploaded as an atomic unit to the Blob storage. The Azure CDN points to this new version only after a completed deployment.
+- Increase the cache TTL by caching resource files for a longer duration, spanning months. To make sure the cached files are updated when they do change, fingerprint the filenames when they are rebuilt. This front-end application fingerprints all files except for public-facing files such as *index.html*. Since the index.html is updated frequently, it reflects the changed filenames causing a cache refresh. See the [Manage expiration of web content in Azure CDN](https://docs.microsoft.com/azure/cdn/cdn-manage-expiration-of-cloud-service-content) for more information.
+
+### Back-end deployment
+
+To deploy the function app, we recommend using [package files][functions-run-from-package] ("Run from package"). Using this approach, you upload a zip file to a Blob Storage container and the Functions runtime mounts the zip file as a read-only file system. This is an atomic operation, which reduces the chance that a failed deployment will leave the application in an inconsistent state. It can also improve cold start times, especially for Node.js apps, because all of the files are swapped at once.
+
 ### API versioning
 
-An API is a contract between a service and clients or consumers of that service. Support versioning in your API contract. If you introduce a breaking API change, introduce a new API version. Deploy the new version side-by-side with the original version, in a separate Function App. This lets you migrate existing clients to the new API without breaking client applications. Eventually, you can deprecate the previous version. For more information about API versioning, see [Versioning a RESTful web API][api-versioning].
+An API is a contract between a service and clients. In this architecture, the API contract is defined at the API Management layer. API Management supports two distinct but complementary [versioning concepts][apim-versioning]:
 
-For updates that are not breaking API changes, deploy the new version to a staging slot in the same Function App. Verify the deployment succeeded and then swap the staged version with the production version.
+- *Versions* allow API consumers to choose an API version based on their needs, such as v1 versus v2.
+
+- *Revisions* allow API administrators to make non-breaking changes in an API and deploy those changes, along with a change log to inform API consumers about the changes.
+
+If you make a breaking change in an API, publish a new version in API Management. Deploy the new version side-by-side with the original version, in a separate Function App. This lets you migrate existing clients to the new API without breaking client applications. Eventually, you can deprecate the previous version. API Management supports several [versioning schemes][apim-versioning-schemes]: URL path, HTTP header, or query string. For more information about API versioning in general, see [Versioning a RESTful web API][api-versioning].
+
+For updates that are not breaking API changes, deploy the new version to a staging slot in the same Function App. Verify the deployment succeeded and then swap the staged version with the production version. Publish a revision in API Management.
 
 ## Deploy the solution
 
-To deploy this reference architecture, view the [GitHub readme][readme]. 
+To deploy the reference implementation for this architecture, see the [GitHub readme][readme].
+
+## Next steps
+
+To learn more about the reference implementation, read [Code walkthrough: Serverless application with Azure Functions](../../serverless/code.md).
+
+Related guidance:
+- [Best practices for using CDNs](../../best-practices/cdn.md)
+- [Static Content Hosting pattern](../../patterns/static-content-hosting.md)
 
 <!-- links -->
 
 [api-versioning]: ../../best-practices/api-design.md#versioning-a-restful-web-api
 [apim]: /azure/api-management/api-management-key-concepts
-[apim-ip]: /azure/api-management/api-management-faq#is-the-api-management-gateway-ip-address-constant-can-i-use-it-in-firewall-rules
+[apim-ip]: /azure/api-management/api-management-faq#how-can-i-secure-the-connection-between-the-api-management-gateway-and-my-back-end-services
 [api-geo]: /azure/api-management/api-management-howto-deploy-multi-region
 [apim-scale]: /azure/api-management/api-management-howto-autoscale
+[apim-validate-jwt]: /azure/api-management/api-management-access-restriction-policies#ValidateJWT
+[apim-versioning]: /azure/api-management/api-management-get-started-publish-versions
+[apim-versioning-schemes]: /azure/api-management/api-management-get-started-publish-versions#choose-a-versioning-scheme
 [app-service-auth]: /azure/app-service/app-service-authentication-overview
 [app-service-ip-restrictions]: /azure/app-service/app-service-ip-restrictions
 [app-service-security]: /azure/app-service/app-service-security
@@ -305,22 +300,24 @@ To deploy this reference architecture, view the [GitHub readme][readme].
 [functions-bindings]: /azure/azure-functions/functions-triggers-bindings
 [functions-cold-start]: https://blogs.msdn.microsoft.com/appserviceteam/2018/02/07/understanding-serverless-cold-start/
 [functions-https]: /azure/app-service/app-service-web-tutorial-custom-ssl#enforce-https
-[functions-proxy]: /azure-functions/functions-proxies
+[functions-proxy]: /azure/azure-functions/functions-proxies
+[functions-run-from-package]: /azure/azure-functions/run-functions-from-deployment-package
 [functions-scale]: /azure/azure-functions/functions-scale
 [functions-timeout]: /azure/azure-functions/functions-scale#consumption-plan
+[functions-zip-deploy]: /azure/azure-functions/deployment-zip-push
 [graph]: https://developer.microsoft.com/graph/docs/concepts/overview
 [key-vault-web-app]: /azure/key-vault/tutorial-web-application-keyvault
-[microservices-domain-analysis]: ../../microservices/domain-analysis.md
+[microservices-domain-analysis]: ../../microservices/model/domain-analysis.md
 [monitor]: /azure/azure-monitor/overview
 [oauth-flow]: https://auth0.com/docs/api-auth/which-oauth-flow-to-use
 [partition-key]: /azure/cosmos-db/partition-data
 [pipelines]: /azure/devops/pipelines/index
 [ru]: /azure/cosmos-db/request-units
+[scopes]: /azure/active-directory/develop/v2-permissions-and-consent
 [static-hosting]: /azure/storage/blobs/storage-blob-static-website
 [static-hosting-preview]: https://azure.microsoft.com/blog/azure-storage-static-web-hosting-public-preview/
 [storage-https]: /azure/storage/common/storage-require-secure-transfer
 [tm]: /azure/traffic-manager/traffic-manager-overview
 
-[github]: https://github.com/mspnp/serverless-reference-implementation
-[HttpRequestAuthorizationExtensions]: https://github.com/mspnp/serverless-reference-implementation/blob/master/src/DroneStatus/dotnet/DroneStatusFunctionApp/HttpRequestAuthorizationExtensions.cs
-[readme]: https://github.com/mspnp/serverless-reference-implementation/blob/master/README.md
+[github]: https://github.com/mspnp/serverless-reference-implementation/tree/v0.1.0-update
+[readme]: https://github.com/mspnp/serverless-reference-implementation/blob/v0.1.0-update/README.md

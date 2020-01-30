@@ -2,7 +2,10 @@
 title: Choosing a data pipeline orchestration technology
 description: 
 author: zoinerTejada
-ms:date: 02/12/2018
+ms.date: 02/12/2018
+ms.topic: guide
+ms.service: architecture-center
+ms.subservice: cloud-fundamentals
 ---
 
 # Choosing a data pipeline orchestration technology in Azure
@@ -37,7 +40,7 @@ The following tables summarize the key differences in capabilities.
 
 ### General capabilities
 
-| | Azure Data Factory | SQL Server Integration Services (SSIS) | Oozie on HDInsight
+| Capability | Azure Data Factory | SQL Server Integration Services (SSIS) | Oozie on HDInsight
 | --- | --- | --- | --- |
 | Managed | Yes | No | Yes |
 | Cloud-based | Yes | No (local) | Yes |
@@ -47,7 +50,7 @@ The following tables summarize the key differences in capabilities.
 
 ### Pipeline capabilities
 
-| | Azure Data Factory | SQL Server Integration Services (SSIS) | Oozie on HDInsight
+| Capability | Azure Data Factory | SQL Server Integration Services (SSIS) | Oozie on HDInsight
 | --- | --- | --- | --- |
 | Copy data | Yes | Yes | Yes |
 | Custom transformations | Yes | Yes | Yes (MapReduce, Pig, and Hive jobs) |
@@ -62,9 +65,8 @@ The following tables summarize the key differences in capabilities.
 
 ### Scalability capabilities
 
-| | Azure Data Factory | SQL Server Integration Services (SSIS) | Oozie on HDInsight
+| Capability | Azure Data Factory | SQL Server Integration Services (SSIS) | Oozie on HDInsight
 | --- | --- | --- | --- |
 | Scale up | Yes | No | No |
 | Scale out | Yes | No | Yes (by adding worker nodes to cluster) |
 | Optimized for big data | Yes | No | Yes |
-

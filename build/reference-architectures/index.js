@@ -8,11 +8,11 @@ const engine = Liquid({
     extname: '.liquid'
 });
 
-module.exports = function (indexFolder) {
+function writeIndexPage(indexFolder) {
 
     const basePath = path.resolve(__dirname, `../../docs/reference-architectures/`, indexFolder);
     const outputhPath = path.resolve(basePath, 'index.md');
-    const jsonPath = path.resolve(basePath, `index.json`);
+    const jsonPath = path.resolve(basePath, `index.json.txt`);
 
     const content = fs.readFileSync(jsonPath, 'utf8');
     const index = JSON.parse(content);
@@ -20,3 +20,6 @@ module.exports = function (indexFolder) {
     engine.renderFile('index', index)
         .then(markdown => fs.writeFile(outputhPath, markdown));
 }
+
+
+writeIndexPage('.');

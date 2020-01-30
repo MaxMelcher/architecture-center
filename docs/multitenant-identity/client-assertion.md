@@ -2,17 +2,23 @@
 title: Use client assertion to get access tokens from Azure AD
 description: How to use client assertion to get access tokens from Azure AD.
 author: MikeWasson
-ms:date: 07/21/2017
-
+ms.date: 07/21/2017
+ms.topic: guide
+ms.service: architecture-center
+ms.subservice: reference-architecture
 pnp.series.title: Manage Identity in Multitenant Applications
 pnp.series.prev: adfs
 pnp.series.next: key-vault
 ---
+
 # Use client assertion to get access tokens from Azure AD
 
 [![GitHub](../_images/github.png) Sample code][sample application]
 
-## Background
+This article describes how to add client assertion to the [Tailspin Surveys][Surveys] sample application.
+
+## Understanding client assertion in OpenID Connect
+
 When using authorization code flow or hybrid flow in OpenID Connect, the client exchanges an authorization code for an access token. During this step, the client has to authenticate itself to the server.
 
 ![Client secret](./images/client-secret.png)
@@ -21,7 +27,7 @@ One way to authenticate the client is by using a client secret. That's how the [
 
 Here is an example request from the client to the IDP, requesting an access token. Note the `client_secret` parameter.
 
-```
+```http
 POST https://login.microsoftonline.com/b9bd2162xxx/oauth2/token HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
 
@@ -34,13 +40,13 @@ resource=https://tailspin.onmicrosoft.com/surveys.webapi
 
 The secret is just a string, so you have to make sure not to leak the value. The best practice is to keep the client secret out of source control. When you deploy to Azure, store the secret in an [app setting][configure-web-app].
 
-However, anyone with access to the Azure subscription can view the app settings. Further, there is always a temptation to check secrets into source control (e.g., in deployment scripts), share them by email, and so on.
+However, anyone with access to the Azure subscription can view the app settings. Furthermore, there is always a temptation to check secrets into source control (for example, in deployment scripts), share them by email, and so on.
 
 For additional security, you can use [client assertion] instead of a client secret. With client assertion, the client uses an X.509 certificate to prove the token request came from the client. The client certificate is installed on the web server. Generally, it will be easier to restrict access to the certificate, than to ensure that nobody inadvertently reveals a client secret. For more information about configuring certificates in a web app, see [Using Certificates in Azure Websites Applications][using-certs-in-websites]
 
 Here is a token request using client assertion:
 
-```
+```http
 POST https://login.microsoftonline.com/b9bd2162xxx/oauth2/token HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
 
@@ -56,10 +62,10 @@ Notice that the `client_secret` parameter is no longer used. Instead, the `clien
 
 > [!NOTE]
 > X.509 certificates are not the only form of client assertion; we focus on it here because it is supported by Azure AD.
-> 
-> 
 
 At run time, the web application reads the certificate from the certificate store. The certificate must be installed on the same machine as the web app.
+
+## Implementing client assertion
 
 The Surveys application includes a helper class that creates a [ClientAssertionCertificate](/dotnet/api/microsoft.identitymodel.clients.activedirectory.clientassertioncertificate) that you can pass to the [AuthenticationContext.AcquireTokenSilentAsync](/dotnet/api/microsoft.identitymodel.clients.activedirectory.authenticationcontext.acquiretokensilentasync) method to acquire a token from Azure AD.
 
@@ -91,18 +97,13 @@ public class CertificateCredentialService : ICredentialService
 }
 ```
 
-For information about setting up client assertion in the Surveys application, see [Use Azure Key Vault to protect application secrets
-][key vault].
+[**Next**](./adfs.md)
 
-[**Next**][key vault]
+<!-- links -->
 
-<!-- Links -->
 [configure-web-app]: /azure/app-service-web/web-sites-configure/
 [azure-management-portal]: https://portal.azure.com
 [client assertion]: https://tools.ietf.org/html/rfc7521
-[key vault]: key-vault.md
-[Setup-KeyVault]: https://github.com/mspnp/multitenant-saas-guidance/blob/master/scripts/Setup-KeyVault.ps1
+[sample application]: https://github.com/mspnp/multitenant-saas-guidance
 [Surveys]: tailspin.md
 [using-certs-in-websites]: https://azure.microsoft.com/blog/using-certificates-in-azure-websites-applications/
-
-[sample application]: https://github.com/mspnp/multitenant-saas-guidance

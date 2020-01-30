@@ -1,8 +1,11 @@
 ---
 title: Choosing an analytical data store
-description: 
+description:
 author: zoinerTejada
-ms:date: 02/12/2018
+ms.date: 11/20/2019
+ms.topic: guide
+ms.service: architecture-center
+ms.subservice: cloud-fundamentals
 ---
 
 # Choosing an analytical data store in Azure
@@ -17,7 +20,7 @@ There is no single best data management choice for all data storage tasks. Diffe
 
 There are several options for data serving storage in Azure, depending on your needs:
 
-- [SQL Data Warehouse](/azure/sql-data-warehouse/sql-data-warehouse-overview-what-is)
+- [Azure Synapse Analytics](/azure/sql-data-warehouse/sql-data-warehouse-overview-what-is)
 - [Azure SQL Database](/azure/sql-database/)
 - [SQL Server in Azure VM](/sql/sql-server/sql-server-technical-documentation)
 - [HBase/Phoenix on HDInsight](/azure/hdinsight/hbase/apache-hbase-overview)
@@ -48,7 +51,7 @@ The following tables summarize the key differences in capabilities.
 
 ### General capabilities
 
-| | SQL Database | SQL Data Warehouse | HBase/Phoenix on HDInsight | Hive LLAP on HDInsight | Azure Analysis Services | Cosmos DB |
+| Capability | SQL Database | Azure Synapse | HBase/Phoenix on HDInsight | Hive LLAP on HDInsight | Azure Analysis Services | Cosmos DB |
 | --- | --- | --- | --- | --- | --- | --- |
 | Is managed service | Yes | Yes | Yes <sup>1</sup> | Yes <sup>1</sup> | Yes | Yes |
 | Primary database model | Relational (columnar format when using columnstore indexes) | Relational tables with columnar storage | Wide column store | Hive/In-Memory | Tabular/MOLAP semantic models | Document store, graph, key-value store, wide column store |
@@ -58,10 +61,10 @@ The following tables summarize the key differences in capabilities.
 [1] With manual configuration and scaling.
 
 [2] Using memory-optimized tables and hash or nonclustered indexes.
- 
+
 ### Scalability capabilities
 
-|                                                  | SQL Database | SQL Data Warehouse | HBase/Phoenix on HDInsight | Hive LLAP on HDInsight | Azure Analysis Services | Cosmos DB |
+| Capability | SQL Database | Azure Synapse | HBase/Phoenix on HDInsight | Hive LLAP on HDInsight | Azure Analysis Services | Cosmos DB |
 |--------------------------------------------------|--------------|--------------------|----------------------------|------------------------|-------------------------|-----------|
 | Redundant regional servers for high availability |     Yes      |        Yes         |            Yes             |           No           |           No            |    Yes    |
 |             Supports query scale out             |      No      |        Yes         |            Yes             |          Yes           |           Yes           |    Yes    |
@@ -70,16 +73,18 @@ The following tables summarize the key differences in capabilities.
 
 ### Security capabilities
 
-| | SQL Database | SQL Data Warehouse | HBase/Phoenix on HDInsight | Hive LLAP on HDInsight | Azure Analysis Services | Cosmos DB |
+| Capability | SQL Database | Azure Synapse | HBase/Phoenix on HDInsight | Hive LLAP on HDInsight | Azure Analysis Services | Cosmos DB |
 | --- | --- | --- | --- | --- | --- | --- |
 | Authentication  | SQL / Azure Active Directory (Azure AD) | SQL / Azure AD | local / Azure AD <sup>1</sup> | local / Azure AD <sup>1</sup> | Azure AD | database users / Azure AD via access control (IAM) |
 | Data encryption at rest | Yes <sup>2</sup> | Yes <sup>2</sup> | Yes <sup>1</sup> | Yes <sup>1</sup> | Yes | Yes |
-| Row-level security | Yes | No | Yes <sup>1</sup> | Yes <sup>1</sup> | Yes (through object-level security in model) | No |
-| Supports firewalls | Yes | Yes | Yes <sup>3</sup> | Yes <sup>3</sup> | Yes | Yes |
-| Dynamic data masking | Yes | No | Yes <sup>1</sup> | Yes * | No | No |
+| Row-level security | Yes | Yes <sup>3</sup> | Yes <sup>1</sup> | Yes <sup>1</sup> | Yes (through object-level security in model) | No |
+| Supports firewalls | Yes | Yes | Yes <sup>4</sup> | Yes <sup>4</sup> | Yes | Yes |
+| Dynamic data masking | Yes | Yes | Yes <sup>1</sup> | Yes | No | No |
 
 [1] Requires using a [domain-joined HDInsight cluster](/azure/hdinsight/domain-joined/apache-domain-joined-introduction).
 
 [2] Requires using transparent data encryption (TDE) to encrypt and decrypt your data at rest.
 
-[3] When used within an Azure Virtual Network. See [Extend Azure HDInsight using an Azure Virtual Network](/azure/hdinsight/hdinsight-extend-hadoop-virtual-network).
+[3] Filter predicates only. See [Row-Level Security](/sql/relational-databases/security/row-level-security)
+
+[4] When used within an Azure Virtual Network. See [Extend Azure HDInsight using an Azure Virtual Network](/azure/hdinsight/hdinsight-extend-hadoop-virtual-network).

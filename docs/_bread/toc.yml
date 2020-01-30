@@ -17,17 +17,17 @@
       topicHref: /azure/architecture/resiliency
     - name: Design Review Checklists
       tocHref: /azure/architecture/checklist/
-      topicHref: /azure/architecture/checklist
+      topicHref: /azure/architecture/checklist/resiliency-per-service
     - name: Manage Identity in Multitenant Applications
       tocHref: /azure/architecture/multitenant-identity/
-      tocHref: /azure/architecture/multitenant-identity
+      topicHref: /azure/architecture/multitenant-identity
     - name: Reference Architectures
       tocHref: /azure/architecture/reference-architectures/
       topicHref: /azure/architecture/reference-architectures
     - name: Cloud Design Patterns
       tocHref: /azure/architecture/patterns/
       topicHref: /azure/architecture/patterns
-    - name: Enterprise Cloud Adoption
+    - name: Cloud Adoption Framework (CAF)
       tocHref: /azure/architecture/cloud-adoption/
       topicHref: /azure/architecture/cloud-adoption
       items:
@@ -39,10 +39,16 @@
         topicHref: /azure/architecture/cloud-adoption/governance
       - name: Infrastructure
         tocHref: /azure/architecture/cloud-adoption/infrastructure/
-        topicHref: /azure/architecture/cloud-adoption/infrastructure
+        topicHref: /azure/architecture/cloud-adoption/infrastructure/basic-workload
       - name: Operations
         tocHref: /azure/architecture/cloud-adoption/operations/
         topicHref: /azure/architecture/cloud-adoption/operations
+      - name: Decision Guides
+        tocHref: /azure/architecture/cloud-adoption/decision-guides/
+        topicHref: /azure/architecture/cloud-adoption/decision-guides/overview
+      - name: Virtual Datacenter (VDC)
+        tocHref: /azure/architecture/vdc/
+        topicHref: /azure/architecture/vdc/
       - name: Appendix
         tocHref: /azure/architecture/cloud-adoption/appendix/
         topicHref: /azure/architecture/cloud-adoption/appendix
@@ -55,7 +61,7 @@
     - name: Data Architecture Guide
       tocHref: /azure/architecture/data-guide/
       topicHref: /azure/architecture/data-guide
-    - name: Design Microservices
+    - name: Microservices
       tocHref: /azure/architecture/microservices/
       topicHref: /azure/architecture/microservices
     - name: Performance Antipatterns

@@ -2,14 +2,17 @@
 title: Real time processing
 description: 
 author: zoinerTejada
-ms:date: 02/12/2018
+ms.date: 02/12/2018
+ms.topic: guide
+ms.service: architecture-center
+ms.subservice: cloud-fundamentals
 ---
 
 # Real time processing
 
 Real time processing deals with streams of data that are captured in real-time and processed with minimal latency to generate real-time (or near-real-time) reports or automated responses. For example, a real-time traffic monitoring solution might use sensor data to detect high traffic volumes. This data could be used to dynamically update a map to show congestion, or automatically initiate high-occupancy lanes or other traffic management systems.
 
-![](./images/real-time-pipeline.png)
+![Diagram of a real time processing pipeline](./images/real-time-pipeline.png)
 
 Real-time processing is defined as the processing of unbounded stream of input data, with very short latency requirements for processing &mdash; measured in milliseconds or seconds. This incoming data typically arrives in an unstructured or semi-structured format, such as JSON, and has the same processing requirements as [batch processing](./batch-processing.md), but with shorter turnaround times to support real-time consumption.
 
@@ -27,9 +30,9 @@ A real-time processing architecture has the following logical components.
 
 - **Stream processing.** After capturing real-time messages, the solution must process them by filtering, aggregating, and otherwise preparing the data for analysis.
 
-- **Analytical data store.** Many big data solutions are designed to prepare data for analysis and then serve the processed data in a structured format that can be queried using analytical tools. 
+- **Analytical data store.** Many big data solutions are designed to prepare data for analysis and then serve the processed data in a structured format that can be queried using analytical tools.
 
-- **Analysis and reporting.** The goal of most big data solutions is to provide insights into the data through analysis and reporting. 
+- **Analysis and reporting.** The goal of most big data solutions is to provide insights into the data through analysis and reporting.
 
 ## Technology choices
 
@@ -37,7 +40,7 @@ The following technologies are recommended choices for real-time processing solu
 
 ### Real-time message ingestion
 
-- **Azure Event Hubs**. Azure Event Hubs is a message queuing solution for ingesting millions of event messages per second. The captured event data can be processed by multiple consumers in parallel.
+- **Azure Event Hubs**. Azure Event Hubs is a messaging solution for ingesting millions of event messages per second. The captured event data can be processed by multiple consumers in parallel. While Event Hubs natively supports AMQP (Advanced Message Queuing Protocol 1.0), it also provides a binary compatibility layer that allows applications using the Kafka protocol (Kafka 1.0 and above) to process events using Event Hubs with no application changes.
 - **Azure IoT Hub**. Azure IoT Hub provides bi-directional communication between Internet-connected devices, and a scalable message queue that can handle millions of simultaneously connected devices.
 - **Apache Kafka**. Kafka is an open source message queuing and stream processing application that can scale to handle millions of messages per second from multiple message producers, and route them to multiple consumers. Kafka is available in Azure as an HDInsight cluster type.
 
@@ -59,7 +62,7 @@ For more information, see [Stream processing](../technology-choices/stream-proce
 
 ### Analytical data store
 
-- **SQL Data Warehouse**, **HBase**, **Spark**, or **Hive**. Processed real-time data can be stored in a relational database such Azure SQL Data Warehouse, a NoSQL store such as HBase, or as files in distributed storage over which Spark or Hive tables can be defined and queried.
+- **Azure Synapse Analytics**, **HBase**, **Spark**, or **Hive**. Processed real-time data can be stored in a relational database such Synapse Analytics, a NoSQL store such as HBase, or as files in distributed storage over which Spark or Hive tables can be defined and queried.
 
 For more information, see [Analytical data stores](../technology-choices/analytical-data-stores.md).
 
@@ -71,3 +74,8 @@ For more information, see [Analytics and reporting](../technology-choices/analys
 
 In a purely real-time solution, most of the processing orchestration is managed by the message ingestion and stream processing components. However, in a lambda architecture that combines batch processing and real-time processing, you may need to use an orchestration framework such as Azure Data Factory or Apache Oozie and Sqoop to manage batch workflows for captured real-time data.
 
+## Next steps
+
+The following reference architecture shows an end-to-end stream processing pipeline:
+
+- [Stream processing with Azure Stream Analytics](../../reference-architectures/data/stream-processing-stream-analytics.md)
