@@ -53,6 +53,8 @@ The following recommendations apply for most scenarios. Follow these recommendat
 ### ExpressRoute circuit
 ### Virtual Network peering 
 
+<!--  -->
+
 ## Availability considerations
 
 ### ExpressRoute geo redundancy
